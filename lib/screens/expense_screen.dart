@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:expensetracker/models/expense.dart';
 import 'package:expensetracker/models/expense_list.dart';
 import 'package:expensetracker/screens/new_expense.dart';
@@ -31,6 +33,7 @@ class _ExpenseState extends State<Expense> {
 
   void _openaddexpenseOverlay() {
     showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpense(
               onAddExpense: _addExpense,
@@ -43,8 +46,36 @@ class _ExpenseState extends State<Expense> {
     });
   }
 
+  void _removeExpense(Expenses expense) {
+    final expenseIndex = _expense.indexOf(expense);
+    setState(() {
+      _expense.remove(expense);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: const Text('Expense Deleted.'),
+      action: SnackBarAction(
+        label: 'undo',
+        onPressed: () {
+          setState(() {
+            _expense.insert(expenseIndex, expense);
+          });
+        },
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text('No expenses found.Start adding some!'),
+    );
+    if (_expense.isNotEmpty) {
+      mainContent = ExpenseList(
+        expense: _expense,
+        removeExpense: _removeExpense,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -58,7 +89,7 @@ class _ExpenseState extends State<Expense> {
       body: Column(
         children: [
           const Text('chart'),
-          Expanded(child: ExpenseList(expense: _expense)),
+          Expanded(child: mainContent),
         ],
       ),
     );
