@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:expensetracker/models/expense.dart';
 import 'package:expensetracker/models/expense_list.dart';
@@ -18,17 +17,17 @@ class _ExpenseState extends State<Expense> {
         title: 'shoe',
         amount: 258.7,
         date: DateTime.now(),
-        category: Category.travel),
+        category: Category.work),
     Expenses(
-        title: 'shirt',
+        title: 'flight ticket',
         amount: 1000.23,
         date: DateTime.now(),
-        category: Category.leisure),
+        category: Category.travel),
     Expenses(
         title: 'movie ticket',
         amount: 300.0,
         date: DateTime.now(),
-        category: Category.work)
+        category: Category.leisure)
   ];
 
   void _openaddexpenseOverlay() {
