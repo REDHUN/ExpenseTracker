@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:expensetracker/models/expense.dart';
 import 'package:expensetracker/models/expense_list.dart';
 import 'package:expensetracker/screens/new_expense.dart';
@@ -68,6 +66,7 @@ class _ExpenseState extends State<Expense> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     Widget mainContent = const Center(
       child: Text('No expenses found.Start adding some!'),
     );
@@ -87,12 +86,19 @@ class _ExpenseState extends State<Expense> {
         ],
         title: const Text('Expense Tracker'),
       ),
-      body: Column(
-        children: [
-          Chart(expenses: _expense),
-          Expanded(child: mainContent),
-        ],
-      ),
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: _expense),
+                Expanded(child: mainContent),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(child: Chart(expenses: _expense)),
+                Expanded(child: mainContent),
+              ],
+            ),
     );
   }
 }
